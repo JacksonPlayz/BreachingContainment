@@ -1,0 +1,30 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+issueTrackerURL="https://github.com/JacksonPlayz/BreachingContainment/issues" #optional
+
+[[mods]]
+modId="${modId}"
+version="${modVersion}"
+displayName="Breaching Containment"
+authors="Ocelot5836, Jackson#9999, Tastac"
+updateJSONURL="https://raw.githubusercontent.com/JacksonPlayz/BreachingContainment/prototype/update.json" #optional
+displayURL="https://curseforge.com/minecraft/mc-mods/breaching-containment" #optional
+logoFile="breach.png" #optional
+credits="Thanks to the SCP Wiki, Northwood Studio, and Undertow Games for inspiration!" #optional
+description='''
+Breaching Containment is a Minecraft mod which converts your normal Minecraft experience into a new horror filled experience based on the SCP universe, all created with a Minecraft feel in mind.
+
+Secure. Contain. Protect
+'''
+[[dependencies.breach]] #optional
+    modId="forge" #mandatory
+    mandatory=true #mandatory
+    versionRange="[31,)" #mandatory
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.breach]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"

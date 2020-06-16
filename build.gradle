@@ -1,0 +1,120 @@
+buildscript {
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+    }
+}
+plugins {
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+
+configurations {
+    shade
+}
+
+version = "${project.minecraft}-${project.version}"
+archivesBaseName = project.id
+group = 'me.jaackson.breach'
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
+minecraft {
+    mappings channel: project.mappingsChannel, version: project.mappings
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            mods {
+                breach {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            mods {
+                breach {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            args '--mod', 'breach', '--all', '--output', file('src/generated/resources/')
+            mods {
+                breach {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    maven {
+        name = "JitPack"
+        url = "https://jitpack.io"
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${project.minecraft}-${project.forge}"
+
+    runtimeOnly fg.deobf("com.github.Ocelot5836:FishLib:${project.fishLib}")
+    compileOnly fg.deobf("com.github.Ocelot5836:FishLib:${project.fishLib}:api")
+    shade "com.github.Ocelot5836:FishLib:${project.fishLib}"
+}
+
+processResources {
+    inputs.property("modVersion", project.version)
+    inputs.property("modId", project.id)
+    from(sourceSets.main.resources.srcDirs) {
+        include 'META-INF/mods.toml'
+        expand 'modVersion': project.version, 'modId': project.id
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'META-INF/mods.toml'
+    }
+}
+
+jar {
+    manifest {
+        attributes([
+            "Specification-Title": "Breaching Containment",
+            "Specification-Vendor": "jaackson.me",
+            "Specification-Version": "1",
+            "Implementation-Title": project.name,
+            "Implementation-Version": project.version,
+            "Implementation-Vendor" :"jaackson.me",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shade]
+    relocate 'io.github.ocelot', 'me.jaackson.lib.ocelot'
+}
+
+reobf {
+    shadowJar {}
+}
+
+artifacts {
+    archives jar
+    archives shadowJar
+}
+
+build.dependsOn reobfShadowJar

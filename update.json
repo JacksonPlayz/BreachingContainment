@@ -1,0 +1,9 @@
+{
+  "homepage": "https://curseforge.com/minecraft/mc-mods/breaching-containment",
+  "1.15.2": {
+    "0.0.1": "Prototype"
+  },
+  "promos": {
+    "1.15.2-latest": "0.0.1"
+  }
+}
