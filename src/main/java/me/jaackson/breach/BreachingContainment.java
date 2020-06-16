@@ -1,9 +1,14 @@
 package me.jaackson.breach;
 
+import me.jaackson.breach.common.init.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -23,29 +28,35 @@ public class BreachingContainment
     public static final ScheduledExecutorService SCHEDULER = Executors.newSingleThreadScheduledExecutor(task -> new Thread(task, MOD_ID));
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static final ItemGroup TAB = new ItemGroup(MOD_ID)
+    public static final BreachItemGroup TAB = new BreachItemGroup(MOD_ID + ".tab", false)
     {
         @Override
         public ItemStack createIcon()
         {
-            return new ItemStack(Blocks.CARVED_PUMPKIN);
+            return new ItemStack(Blocks.PUMPKIN);
         }
     };
 
     public BreachingContainment()
     {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modBus.addListener(this::init);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(SCHEDULER::shutdown));
 
         MinecraftForge.EVENT_BUS.register(this);
-        Runtime.getRuntime().addShutdownHook(new Thread(SCHEDULER::shutdown));
+        BreachItems.ITEMS.register(modBus);
+        BreachBlocks.BLOCKS.register(modBus);
+        BreachEntities.ENTITIES.register(modBus);
+        BreachSounds.SOUNDS.register(modBus);
     }
 
-    private void setup(final FMLCommonSetupEvent event)
+    private void init(final FMLCommonSetupEvent event)
     {
     }
 
-    private void clientSetup(final FMLClientSetupEvent event)
+    @OnlyIn(Dist.CLIENT)
+    public static void setup(FMLClientSetupEvent event)
     {
     }
 }

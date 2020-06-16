@@ -28,7 +28,7 @@ function patch_sound_source(class_node) {
             play_sound_instructions.insertBefore(insn, new VarInsnNode(Opcodes.ALOAD, 0));
             play_sound_instructions.insertBefore(insn, new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/audio/SoundSource", api.mapField("field_216441_b"), "I"));
             play_sound_instructions.insertBefore(insn, new VarInsnNode(Opcodes.ALOAD, 1));
-            play_sound_instructions.insertBefore(insn, new MethodInsnNode(Opcodes.INVOKESTATIC, "me/jaackson/breach/client/ReverbHandler", "onPlaySound", "(ILnet/minecraft/util/math/Vec3d;)V", false));
+            play_sound_instructions.insertBefore(insn, new MethodInsnNode(Opcodes.INVOKESTATIC, "me/jaackson/breach/client/sound/ReverbHandler", "onPlaySound", "(ILnet/minecraft/util/math/Vec3d;)V", false));
             break;
         }
     }
@@ -43,7 +43,7 @@ function patch_sound_source(class_node) {
         if (iconst1_count == 2) {
             delete_sound_instructions.insertBefore(insn, new VarInsnNode(Opcodes.ALOAD, 0));
             delete_sound_instructions.insertBefore(insn, new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/audio/SoundSource", api.mapField("field_216441_b"), "I"));
-            delete_sound_instructions.insertBefore(insn, new MethodInsnNode(Opcodes.INVOKESTATIC, "me/jaackson/breach/client/ReverbHandler", "onDeleteSound", "(I)V", false));
+            delete_sound_instructions.insertBefore(insn, new MethodInsnNode(Opcodes.INVOKESTATIC, "me/jaackson/breach/client/sound/ReverbHandler", "onDeleteSound", "(I)V", false));
             break;
         }
     }

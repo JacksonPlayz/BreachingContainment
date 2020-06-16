@@ -1,4 +1,4 @@
-package me.jaackson.breach.client;
+package me.jaackson.breach.client.sound;
 
 import me.jaackson.breach.BreachingContainment;
 import net.minecraft.client.Minecraft;
